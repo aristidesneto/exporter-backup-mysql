@@ -1,0 +1,4 @@
+backup:
+  log_path: backup.log
+server:
+  port: 9009

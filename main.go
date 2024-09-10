@@ -10,6 +10,7 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/spf13/viper"
 )
 
 type metrics struct {
@@ -53,11 +54,25 @@ func main()  {
 	reg := prometheus.NewRegistry()
 	m := NewMetrics(reg)
 
-	logFile := "backup.log"
+	// Inicializar o Viper e configurar
+    viper.SetConfigName("config")
+    viper.SetConfigType("yaml")
+    viper.AddConfigPath("./config")
 
-	file, err := os.Open(logFile)
+    err := viper.ReadInConfig()
+    if err != nil {
+        fmt.Printf("Erro ao ler o arquivo de configuração: %v", err)
+    }
+
+    logPath := viper.GetString("backup.log_path")
+	serverPort := viper.GetString("server.port")
+
+	fmt.Printf("Carregando arquivo de configuração: %s\n", logPath)
+
+
+	file, err := os.Open(logPath)
 	if err != nil {
-		fmt.Println("Erro ao abrir o arquivo: ", err)
+		fmt.Println("Erro ao abrir o arquivo:", err)
 		return
 	}
 	defer file.Close()
@@ -76,8 +91,8 @@ func main()  {
     }
 	
 	http.Handle("/metrics", promhttp.HandlerFor(reg, promhttp.HandlerOpts{Registry: reg}))
-	fmt.Println("Server is up: port 8888")
-	http.ListenAndServe(":8888", nil)
+	fmt.Printf("Server is running on port %s", serverPort)
+	http.ListenAndServe(":"+serverPort, nil)
 
 }
 
