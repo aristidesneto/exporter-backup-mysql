@@ -2,7 +2,7 @@ package main
 
 import (
 	"bufio"
-	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -61,18 +61,18 @@ func main()  {
 
     err := viper.ReadInConfig()
     if err != nil {
-        fmt.Printf("Erro ao ler o arquivo de configuração: %v", err)
+        log.Printf("Erro ao ler o arquivo de configuração: %v", err)
     }
 
     logPath := viper.GetString("backup.log_path")
 	serverPort := viper.GetString("server.port")
 
-	fmt.Printf("Carregando arquivo de configuração: %s\n", logPath)
+	log.Printf("Arquivo de configuração carregado: %s\n", logPath)
 
 
 	file, err := os.Open(logPath)
 	if err != nil {
-		fmt.Println("Erro ao abrir o arquivo:", err)
+		log.Println("Erro ao abrir o arquivo:", err)
 		return
 	}
 	defer file.Close()
@@ -91,7 +91,7 @@ func main()  {
     }
 	
 	http.Handle("/metrics", promhttp.HandlerFor(reg, promhttp.HandlerOpts{Registry: reg}))
-	fmt.Printf("Server is running on port %s", serverPort)
+	log.Printf("Server is running on port %s", serverPort)
 	http.ListenAndServe(":"+serverPort, nil)
 
 }
@@ -103,7 +103,7 @@ func processLogLine(index int, line string, lines []string, m metrics) {
 	layoutDate := "2006-01-02 15:04:05"
 
 	if len(parts) < 4 {
-		fmt.Println("Linha malformada:", line)
+		log.Println("Linha malformada:", line)
 		return
 	}
 
@@ -119,12 +119,12 @@ func processLogLine(index int, line string, lines []string, m metrics) {
 
 		start_time, err := time.Parse(layoutDate, timestamp)
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 		}
 		
 		end_time, err := time.Parse(layoutDate, strings.TrimSpace(strings.Split(lines[index + 1], "|")[0]))
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 		}
 
 		duration := end_time.Sub(start_time)
