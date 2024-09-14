@@ -1,18 +1,18 @@
-# Exporter Backup Mysql
+# Exporter Mysql Backup
 
-Exporter para backups de banco Mysql. Obtém o log do backup realizado e exporta como métricas para o Prometheus.
+Exporter to Mysql database backups. Gets the log of the backup performed and exports it as metrics to Prometheus. 
 
-> Em desenvolvimento
+> Working In Progress
 
-## Estrutura de Log
+## Log structure
 
-A estrutura de log deve seguir o padrão:
+The log structure must follow the pattern:
 
 ```
-timestamp | evento | origem | status | mensagem
+timestamp | event | source | status | message
 ```
 
-Exemplo:
+Example:
 
 ```
 2024-09-08 20:30:01 | DUMP_INICIADO | database_1 | Inicio | Iniciando dump do banco de dados
@@ -23,9 +23,9 @@ Exemplo:
 2024-09-08 20:56:46 | UPLOAD_CONCLUIDO | database_1 | OK | Upload realizado com sucesso
 ```
 
-## Métricas
+## Metrics
 
-Exemplos de métricas que o exporter irá expor para o Prometheus:
+Examples of metrics that the exporter will exponse to Prometheus:
 
 ```
 dump_database_success_total{server="db-server",source="database_1"} 2
