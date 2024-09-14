@@ -1,4 +1,5 @@
 backup:
   log_path: backup.log
 server:
+  hostname: my-server
   port: 9009
