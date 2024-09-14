@@ -1,6 +1,10 @@
 package metrics
 
-import "github.com/prometheus/client_golang/prometheus"
+import (
+	"log"
+
+	"github.com/prometheus/client_golang/prometheus"
+)
 
 
 type Metrics struct {
@@ -9,7 +13,9 @@ type Metrics struct {
 	DatabaseDuration *prometheus.GaugeVec
 }
 
-func NewMetrics(reg prometheus.Registerer) *Metrics  {
+var M *Metrics
+
+func NewMetrics(reg *prometheus.Registry) *Metrics  {
 	metrics := &Metrics{
 		DatabaseCounterSuccess: prometheus.NewCounterVec(
 			prometheus.CounterOpts{
@@ -34,9 +40,16 @@ func NewMetrics(reg prometheus.Registerer) *Metrics  {
 		),
 	}
 
+	// Verificar se as métricas foram criadas corretamente
+	if metrics.DatabaseCounterSuccess == nil || metrics.DatabaseCounterFailed == nil || metrics.DatabaseDuration == nil {
+		log.Fatal("Failed to initialize one or more metrics")
+	}
+
 	reg.MustRegister(metrics.DatabaseCounterSuccess)
 	reg.MustRegister(metrics.DatabaseCounterFailed)
 	reg.MustRegister(metrics.DatabaseDuration)
+
+	M = metrics
 
 	return metrics
 }
