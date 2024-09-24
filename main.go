@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
 
@@ -32,12 +33,15 @@ func init()  {
 
 
 func main()  {
+	var logPath string
+	flag.StringVar(&logPath, "logpath", "backup.log", "Informe o caminho do arquivo de backup de log")
+	flag.Parse()
+
 	if reg == nil {
 		log.Fatal("Registry is nil before setting up HTTP handler")
 	}
 
 	// Loading backup file
-	logPath := viper.GetString("backup.log_path")
 	parser.LoadFile(logPath)
 
 	serverPort := viper.GetString("server.port")
