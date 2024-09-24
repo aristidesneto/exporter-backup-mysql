@@ -54,7 +54,14 @@ func parserLogLine(index int, line string, lines []string) {
 	hostname := viper.GetString("server.hostname")
 
 	if event == "DUMP_INICIADO" {
-		nextLine := lines[index + 1]
+		indice := index + 1
+
+		if indice >= len(lines) {
+			return
+		}
+
+		nextLine := lines[indice]
+
 		backupStart := strings.TrimSpace(parts[0])
 
 		start_time, err := time.Parse(layoutDate, timestamp)
