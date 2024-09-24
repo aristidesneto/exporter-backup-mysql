@@ -36,3 +36,22 @@ dump_database_duration_seconds{reference="2024-09-08 20:30:01",server="db-server
 dump_database_duration_seconds{reference="2024-09-08 21:30:01",server="db-server",source="database_1",start_time="2024-09-08 21:30:01"} 295
 dump_database_duration_seconds{reference="2024-09-08 21:30:01",server="db-server",source="database_2",start_time="2024-09-08 21:56:57"} 11
 ```
+
+
+## Systemd config
+
+```conf
+[Unit]
+Description=Exporter Mysql Backup Log
+After=network.target
+ 
+[Service]
+Type=simple
+User=root
+Group=root
+ExecStart=/etc/exporter-mysql-backup/exporter --logpath=/var/log/backups/database_dump.log
+WorkingDirectory=/etc/exporter-mysql-backup
+ 
+[Install]
+WantedBy=multi-user.target
+```
