@@ -3,15 +3,12 @@ package main
 import (
 	"flag"
 	"log"
-	"net/http"
 
 	"github.com/aristidesneto/exporter-backup-mysql/config"
 	"github.com/aristidesneto/exporter-backup-mysql/metrics"
 	"github.com/aristidesneto/exporter-backup-mysql/parser"
-	"github.com/spf13/viper"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 var reg *prometheus.Registry
@@ -44,11 +41,11 @@ func main()  {
 	// Loading backup file
 	parser.LoadFile(logPath)
 
-	serverPort := viper.GetString("server.port")
-	http.Handle("/metrics", promhttp.HandlerFor(reg, promhttp.HandlerOpts{Registry: reg}))
-	log.Printf("Server is running on port %s", serverPort)
-	err := http.ListenAndServe(":" + serverPort, nil)
-	if err != nil {
-		log.Fatalf("Failed to start HTTP server: %v", err)
-	}
+	// serverPort := viper.GetString("server.port")
+	// http.Handle("/metrics", promhttp.HandlerFor(reg, promhttp.HandlerOpts{Registry: reg}))
+	// log.Printf("Server is running on port %s", serverPort)
+	// err := http.ListenAndServe(":" + serverPort, nil)
+	// if err != nil {
+	// 	log.Fatalf("Failed to start HTTP server: %v", err)
+	// }
 }

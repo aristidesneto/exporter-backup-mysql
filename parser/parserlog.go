@@ -33,6 +33,10 @@ func LoadFile(logPath string) {
 	for i, line := range lines {
 		parserLogLine(i, line, lines)
     }
+
+	metrics.PushMetrics("DatabaseCounterSuccess")
+	metrics.PushMetrics("DatabaseCounterFailed")
+	metrics.PushMetrics("DatabaseDuration")
 }
 
 func parserLogLine(index int, line string, lines []string) {
