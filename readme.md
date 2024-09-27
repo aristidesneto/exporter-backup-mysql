@@ -55,3 +55,10 @@ WorkingDirectory=/etc/exporter-mysql-backup
 [Install]
 WantedBy=multi-user.target
 ```
+
+## Crontab
+
+```
+# Exporter mysql backup
+20 * * * * user /path/to/script/start.sh >> /path/to/script/exporter.log 2>&1
+```
