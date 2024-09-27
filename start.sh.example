@@ -1,0 +1,9 @@
+#!/bin/bash
+
+export PUSHGATEWAY_URL=https://localhost:9091
+export PUSHGATEWAY_AUTH_USER=user
+export PUSHGATEWAY_AUTH_PASS=password
+
+cd /path/to/file
+
+./exporter --logpath=/path/to/logfile/dump.log

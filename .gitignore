@@ -27,3 +27,4 @@ go.work.sum
 # custom
 *.log
 !example.log
+exporter
