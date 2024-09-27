@@ -58,11 +58,22 @@ func NewMetrics(reg *prometheus.Registry) *Metrics  {
 }
 
 func PushMetrics(metric string)  {
-	url_pushgateway := os.Getenv("URL_PUSHGATEWAY")
+	url_pushgateway := os.Getenv("PUSHGATEWAY_URL")
+	auth_username := os.Getenv("PUSHGATEWAY_AUTH_USER")
+	auth_password := os.Getenv("PUSHGATEWAY_AUTH_PASS")
+
 	if url_pushgateway == "" {
-		log.Fatalln("Missing URL_PUSHGATEWAY variable")
+		log.Fatalln("Missing PUSHGATEWAY_URL variable")
 	}
-	pusher := push.New(url_pushgateway, "mysql_backup")
+
+	if auth_username == "" {
+		log.Fatalln("Missing PUSHGATEWAY_AUTH_USER variable")
+	}
+
+	if auth_password == "" {
+		log.Fatalln("Missing PUSHGATEWAY_AUTH_PASS variable")
+	}
+	pusher := push.New(url_pushgateway, "mysql_backup").BasicAuth(auth_username, auth_password)
 
 	// Acessando o campo dinamicamente
     field, err := getMetricByName(M, metric)
