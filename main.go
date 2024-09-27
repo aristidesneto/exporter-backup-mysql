@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"log"
+	"os"
+	"path/filepath"
 
 	"github.com/aristidesneto/exporter-backup-mysql/config"
 	"github.com/aristidesneto/exporter-backup-mysql/metrics"
@@ -13,9 +15,14 @@ import (
 
 var reg *prometheus.Registry
 
-func init()  {
-	// Configuration file
-	config.Configuration("./config")
+func init() {
+	exePath, err := os.Executable()
+	if err != nil {
+		log.Fatalf("Error finding executable path: %s", err)
+	}
+	exeDir := filepath.Dir(exePath)
+	configDir := filepath.Join(exeDir, "config")
+	config.Configuration(configDir)
 
 	// Prometheus metrics
 	reg = prometheus.NewRegistry()
